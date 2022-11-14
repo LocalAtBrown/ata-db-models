@@ -54,5 +54,13 @@ To update dependencies in your local environment, make changes to the `pyproject
 
 ### Run Tests
 
-To manually run rests, simply run `pytest tests` from the root directory of the project. Explore the `pytest` docs (linked above)
+To manually run rests, you need to have a Postgres instance running locally on port 5432. One way to do this
+is to run a Docker container, then run the tests while it is active.
+
+1. (If you don't already have the image locally) Run `docker pull postgres`
+2. Run `docker run --rm --name postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_HOST_AUTH_METHOD=trust -p 127.0.0.1:5432:5432/tcp postgres`
+3. Run `pytest tests` from the root directory of the project. Explore the `pytest` docs (linked above)
 to see more options.
+
+Note that if you decide to run the Postgres container with different credentials (a different password, port, etc.) or
+via a different method, you will likely need to update the test file to point to the correct Postgres instance.

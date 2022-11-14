@@ -41,6 +41,7 @@ profile = "black"
 
 [tool.mypy]
 ignore_missing_imports = "True"
+files = "src/models.py"
 exclude = [
     '\.venv',
     'tests'

@@ -25,3 +25,7 @@ def create_user(user_name: str) -> None:
     with engine.connect() as conn:
         conn.execute(statement, {"user_name": user_name, "password": "todo"})
         conn.commit()
+
+
+def grant_privileges(user_name: str, privileges: list[str]) -> None:
+    pass

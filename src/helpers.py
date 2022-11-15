@@ -1,3 +1,4 @@
+import random
 from enum import Enum
 
 from sqlalchemy.future.engine import Connection
@@ -44,5 +45,9 @@ def grant_privileges(conn: Connection, user_name: str, table: str, privileges: l
 def enable_row_level_security(conn: Connection, table: str, target_column: str, user_name: str) -> None:
     s1 = text(f"ALTER TABLE {table} ENABLE ROW LEVEL SECURITY")
     conn.execute(s1)
-    s2 = text(f"CREATE POLICY TODO ON {table} TO {user_name} USING (current_user LIKE '%' || {target_column} || '%')")
+    random_prefix = "%06x" % random.randrange(16**6)
+    policy_name = f"{random_prefix}-{table}"
+    s2 = text(
+        f"CREATE POLICY {policy_name} ON {table} TO {user_name} USING (current_user LIKE '%' || {target_column} || '%')"
+    )
     conn.execute(s2)

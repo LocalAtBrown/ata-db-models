@@ -1,31 +1,50 @@
-import os
+from enum import Enum
 
-from sqlmodel import create_engine, text
-
-engine = create_engine(
-    os.getenv(
-        "DB_CONNECTION_STRING", "postgresql://postgres:postgres@localhost:5432/postgres"
-    )
-)
+from sqlalchemy.future.engine import Connection
+from sqlmodel import text
 
 
-def create_database(db_name: str) -> None:
+class Privilege(str, Enum):
+    """
+    Possible privileges to grant to Postgres users: https://www.postgresql.org/docs/15/ddl-priv.html
+    """
+
+    SELECT = "SELECT"
+    INSERT = "INSERT"
+    UPDATE = "UPDATE"
+    DELETE = "DELETE"
+    TRUNCATE = "TRUNCATE"
+    REFERENCES = "REFERENCES"
+    TRIGGER = "TRIGGER"
+    CREATE = "CREATE"
+    CONNECT = "CONNECT"
+    TEMPORARY = "TEMPORARY"
+    EXECUTE = "EXECUTE"
+    USAGE = "USAGE"
+    SET = "SET"
+    ALTER_SYSTEM = "ALTER_SYSTEM"
+
+
+def create_database(conn: Connection, db_name: str) -> None:
     statement = text("CREATE DATABASE :db_name")
-    with engine.connect() as conn:
-        conn.execute(statement, {"db_name": db_name})
-        conn.commit()
+    conn.execute(statement, {"db_name": db_name})
 
 
-def create_user(user_name: str) -> None:
-    # create a user per component per partner per stage (per stage corresponds to per db)
-    # for example: afrola should have 1 for pipeline0, one for pipeline1, and one for the api, all with appropriate
-    # permissions (p0  reads/writes to events, p1 reads from events and reads/writes to X, api only reads X)
-    # and this would all be for one stage, e.g. prod
+def create_user(conn: Connection, user_name: str) -> None:
     statement = text("CREATE USER :user_name WITH PASSWORD ':password'")
-    with engine.connect() as conn:
-        conn.execute(statement, {"user_name": user_name, "password": "todo"})
-        conn.commit()
+    conn.execute(statement, {"user_name": user_name, "password": "todo"})
 
 
-def grant_privileges(user_name: str, privileges: list[str]) -> None:
-    pass
+def grant_privileges(
+    conn: Connection, user_name: str, table: str, privileges: list[Privilege]
+) -> None:
+    formatted_privileges = " ".join(privileges)
+    statement = text(f"GRANT :formatted_privileges ON :table TO :user_name")
+    conn.execute(
+        statement,
+        {
+            "formatted_privileges": formatted_privileges,
+            "table": table,
+            "user_name": user_name,
+        },
+    )

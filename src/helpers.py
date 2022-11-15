@@ -35,20 +35,14 @@ def create_user(conn: Connection, user_name: str) -> None:
     conn.execute(statement, {"password": "todo"})
 
 
-def grant_privileges(
-    conn: Connection, user_name: str, table: str, privileges: list[Privilege]
-) -> None:
+def grant_privileges(conn: Connection, user_name: str, table: str, privileges: list[Privilege]) -> None:
     formatted_privileges = " ".join(privileges)
     statement = text(f"GRANT {formatted_privileges} ON {table} TO {user_name}")
     conn.execute(statement)
 
 
-def enable_row_level_security(
-    conn: Connection, table: str, target_column: str, user_name: str
-) -> None:
+def enable_row_level_security(conn: Connection, table: str, target_column: str, user_name: str) -> None:
     s1 = text(f"ALTER TABLE {table} ENABLE ROW LEVEL SECURITY")
     conn.execute(s1)
-    s2 = text(
-        f"CREATE POLICY TODO ON {table} TO {user_name} USING (current_user LIKE '%' || {target_column} || '%')"
-    )
+    s2 = text(f"CREATE POLICY TODO ON {table} TO {user_name} USING (current_user LIKE '%' || {target_column} || '%')")
     conn.execute(s2)

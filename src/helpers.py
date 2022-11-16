@@ -1,6 +1,7 @@
 import random
 from enum import Enum
 
+from sqlalchemy.engine import Result
 from sqlalchemy.future.engine import Connection
 from sqlmodel import text
 
@@ -26,37 +27,48 @@ class Privilege(str, Enum):
     ALTER_SYSTEM = "ALTER_SYSTEM"
 
 
-def create_database(conn: Connection, db_name: str) -> None:
+def create_database(conn: Connection, db_name: str) -> Result:
     statement = text(f"CREATE DATABASE {db_name}")
-    conn.execute(statement)
+    return conn.execute(statement)
 
 
-def create_role(conn: Connection, role: str) -> None:
+def create_role(conn: Connection, role: str) -> Result:
     statement = text(f"CREATE ROLE {role}")
-    conn.execute(statement)
+    return conn.execute(statement)
 
 
-def create_user(conn: Connection, user_name: str) -> None:
-    statement = text(f"CREATE USER {user_name} WITH PASSWORD :password")
-    conn.execute(statement, {"password": "todo"})
+def create_user(conn: Connection, username: str) -> Result:
+    statement = text(f"CREATE USER {username} WITH PASSWORD :password")
+    return conn.execute(statement, {"password": "todo"})
 
 
-def assign_role(conn: Connection, role: str, user_names: list[str]) -> None:
-    users = ", ".join(user_names)
+def assign_role(conn: Connection, role: str, usernames: list[str]) -> Result:
+    users = ", ".join(usernames)
     statement = text(f"GRANT {role} TO {users}")
-    conn.execute(statement)
+    return conn.execute(statement)
 
 
-def grant_privileges(conn: Connection, user_name: str, table: str, privileges: list[Privilege]) -> None:
+def grant_privileges(conn: Connection, user_or_role: str, table: str, privileges: list[Privilege]) -> Result:
     formatted_privileges = " ".join(privileges)
-    statement = text(f"GRANT {formatted_privileges} ON {table} TO {user_name}")
-    conn.execute(statement)
+    statement = text(f"GRANT {formatted_privileges} ON {table} TO {user_or_role}")
+    return conn.execute(statement)
 
 
 def enable_row_level_security(conn: Connection, table: str, target_column: str, role: str) -> None:
     s1 = text(f"ALTER TABLE {table} ENABLE ROW LEVEL SECURITY")
     conn.execute(s1)
     random_prefix = "%06x" % random.randrange(16**6)
-    policy_name = f"{random_prefix}-{table}"
+    policy_name = f"{random_prefix}-{table}-{role}"
     s2 = text(f"CREATE POLICY {policy_name} ON {table} TO {role} USING (current_user LIKE '%' || {target_column} || '%')")
     conn.execute(s2)
+
+
+def create_databases(conn: Connection, db_names: list[str]) -> None:
+    # create db for each stage
+    for db_name in db_names:
+        create_database(conn, db_name=db_name)
+
+
+def create_users(conn: Connection, usernames: list[str]) -> None:
+    for username in usernames:
+        create_user(conn, username=username)

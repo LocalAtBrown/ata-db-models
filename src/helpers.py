@@ -1,4 +1,5 @@
 import random
+from dataclasses import dataclass
 from enum import Enum
 
 from sqlalchemy.engine import Result
@@ -27,7 +28,40 @@ class Privilege(str, Enum):
     ALTER_SYSTEM = "ALTER_SYSTEM"
 
 
-def create_database(conn: Connection, db_name: str) -> Result:
+class Stage(str, Enum):
+    dev = "dev"
+    prod = "prod"
+
+
+class Partner(str, Enum):
+    afro_la = "afro_la"
+    dallas_free_press = "dallas_free_press"
+    open_vallejo = "open_vallejo"
+    the_19th = "the_19th"
+
+
+@dataclass
+class Grant:
+    privileges: list[Privilege]
+    tables: list[str]
+
+
+@dataclass
+class RowLevelSecurityPolicy:
+    table: str
+    user_column: str
+    policy_name: str | None = None
+
+
+@dataclass
+class Component:
+    # effectively a db-constrained role
+    name: str
+    grants: list[Grant] | None = None
+    policies: list[RowLevelSecurityPolicy] | None = None
+
+
+def create_database(conn: Connection, db_name: Stage) -> Result:
     statement = text(f"CREATE DATABASE {db_name}")
     return conn.execute(statement)
 
@@ -38,6 +72,7 @@ def create_role(conn: Connection, role: str) -> Result:
 
 
 def create_user(conn: Connection, username: str) -> Result:
+    # TODO password???
     statement = text(f"CREATE USER {username} WITH PASSWORD :password")
     return conn.execute(statement, {"password": "todo"})
 
@@ -61,12 +96,6 @@ def enable_row_level_security(conn: Connection, table: str, target_column: str, 
     policy_name = f"{random_prefix}-{table}-{role}"
     s2 = text(f"CREATE POLICY {policy_name} ON {table} TO {role} USING (current_user LIKE '%' || {target_column} || '%')")
     conn.execute(s2)
-
-
-def create_databases(conn: Connection, db_names: list[str]) -> None:
-    # create db for each stage
-    for db_name in db_names:
-        create_database(conn, db_name=db_name)
 
 
 def create_users(conn: Connection, usernames: list[str]) -> None:

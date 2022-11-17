@@ -37,6 +37,7 @@ def partners():
     return [Partner.afro_la, Partner.dallas_free_press]
 
 
+@pytest.mark.order(1)
 def test_pre_table_initialization(components, partners):
     # run function
     stage = Stage.dev
@@ -84,5 +85,12 @@ def test_pre_table_initialization(components, partners):
             assert sorted([row[0] for row in result_data]) == sorted(expected_usernames)
 
 
-def test_post_table_initialization():
+@pytest.mark.order(2)
+def test_initialize_tables():
+    pass
+
+
+@pytest.mark.order(3)
+def test_post_table_initialization(components, partners):
+    # needs pre_table_init and table creation to have run
     pass

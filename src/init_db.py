@@ -1,5 +1,3 @@
-import os
-
 from sqlalchemy.future.engine import create_engine
 
 from src.helpers import (
@@ -14,6 +12,7 @@ from src.helpers import (
     create_role,
     create_users,
     enable_row_level_security,
+    get_conn_string,
     grant_privileges,
 )
 from src.models import SQLModel
@@ -64,16 +63,6 @@ def initialize_all_database_entities(stage: Stage, components: list[Component], 
     initialize_tables(stage=stage)
     # needs this stage's db
     post_table_initialization(stage=stage, components=components)
-
-
-def get_conn_string(db_name: str) -> str:
-    # everything but dbname should be the same, since we are using the admin user for everything
-    host = os.getenv("HOST", "localhost")
-    port = os.getenv("PORT", "5432")
-    user = os.getenv("USERNAME", "postgres")
-    password = os.getenv("PASSWORD", "postgres")
-
-    return f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
 
 
 def main():

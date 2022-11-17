@@ -10,7 +10,8 @@ from src.helpers import (
     Stage,
     get_conn_string,
 )
-from src.init_db import pre_table_initialization
+from src.init_db import initialize_tables, pre_table_initialization
+from src.models import SQLModel
 
 
 @pytest.fixture
@@ -37,10 +38,14 @@ def partners():
     return [Partner.afro_la, Partner.dallas_free_press]
 
 
+@pytest.fixture
+def stage():
+    return Stage.dev
+
+
 @pytest.mark.order(1)
-def test_pre_table_initialization(components, partners):
+def test_pre_table_initialization(components, partners, stage):
     # run function
-    stage = Stage.dev
     pre_table_initialization(stage=stage, components=components, partner_names=partners)
 
     engine = create_engine(get_conn_string(db_name="postgres"))
@@ -86,8 +91,18 @@ def test_pre_table_initialization(components, partners):
 
 
 @pytest.mark.order(2)
-def test_initialize_tables():
-    pass
+def test_initialize_tables(stage):
+    initialize_tables(stage)
+    # check to see if expected tables exist
+    engine = create_engine(get_conn_string(db_name=stage))
+    with engine.connect() as conn:
+        statement = text(
+            "SELECT tablename FROM pg_catalog.pg_tables "
+            "WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema'"
+        )
+        result = conn.execute(statement)
+        result_data = result.fetchall()
+        assert sorted([row[0] for row in result_data]) == sorted(list(SQLModel.metadata.tables))
 
 
 @pytest.mark.order(3)

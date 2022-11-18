@@ -45,7 +45,7 @@ to see more options.
 
 ### Run Static Type Checking
 
-To manually run mypy, simply run `mypy .` from the root directory of the project. It will use the default configuration
+To manually run mypy, simply run `mypy` from the root directory of the project. It will use the default configuration
 specified in `pyproject.toml`.
 
 ### Update Dependencies
@@ -64,3 +64,6 @@ to see more options.
 
 Note that if you decide to run the Postgres container with different credentials (a different password, port, etc.) or
 via a different method, you will likely need to update the test file to point to the correct Postgres instance.
+
+Additionally, if you want to re-run the tests, you want to make sure you start over from a fresh Postgres
+instance. If you run Postgres via Docker, you can simply `ctrl-C` to stop the image and start a new one.

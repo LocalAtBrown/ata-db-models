@@ -45,7 +45,8 @@ profile = "black"
 [tool.mypy]
 # use the strict option since this a new project
 strict = "True"
-files = "src/models.py"
+implicit_reexport = "True"
+files = "."
 exclude = [
     '\.venv',
     'tests'

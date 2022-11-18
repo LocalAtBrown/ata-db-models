@@ -65,7 +65,7 @@ def initialize_all_database_entities(stage: Stage, components: list[Component], 
     post_table_initialization(stage=stage, components=components)
 
 
-def main():
+def main() -> None:
     stages = [Stage.dev, Stage.prod]
     pipeline0 = Component(
         name="pipeline0",

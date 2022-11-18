@@ -58,8 +58,8 @@ class RowLevelSecurityPolicy:
 class Component:
     # effectively a db-constrained role
     name: str
-    grants: list[Grant] | None = None
-    policies: list[RowLevelSecurityPolicy] | None = None
+    grants: list[Grant]
+    policies: list[RowLevelSecurityPolicy]
 
 
 def create_database(conn: Connection, db_name: Stage) -> Result:
@@ -73,7 +73,7 @@ def create_role(conn: Connection, role: str) -> Result:
 
 
 def create_user(conn: Connection, username: str) -> Result:
-    # TODO password???
+    # TODO password
     statement = text(f"CREATE USER {username} WITH PASSWORD :password")
     return conn.execute(statement, {"password": "todo"})
 

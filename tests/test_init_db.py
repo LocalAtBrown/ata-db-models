@@ -10,7 +10,11 @@ from src.helpers import (
     Stage,
     get_conn_string,
 )
-from src.init_db import initialize_tables, pre_table_initialization
+from src.init_db import (
+    initialize_tables,
+    post_table_initialization,
+    pre_table_initialization,
+)
 from src.models import SQLModel
 
 
@@ -92,6 +96,7 @@ def test_pre_table_initialization(components, partners, stage):
 
 @pytest.mark.order(2)
 def test_initialize_tables(stage):
+    # needs pre_table_init to have run
     initialize_tables(stage)
     # check to see if expected tables exist
     engine = create_engine(get_conn_string(db_name=stage))
@@ -106,6 +111,36 @@ def test_initialize_tables(stage):
 
 
 @pytest.mark.order(3)
-def test_post_table_initialization(components, partners):
+def test_post_table_initialization(components, partners, stage):
     # needs pre_table_init and table creation to have run
-    pass
+    post_table_initialization(stage=stage, components=components)
+
+    engine = create_engine(get_conn_string(db_name=stage))
+    with engine.connect() as conn:
+        # check for correct privileges
+        for component in components:
+            for grant in component.grants:
+                for table in grant.tables:
+                    statement = text(
+                        "SELECT privilege_type FROM information_schema.role_table_grants "
+                        "WHERE table_name=:table_name AND grantee=:role_name"
+                    )
+                    result = conn.execute(statement, {"table_name": table, "role_name": f"{stage}_{component.name}"})
+                    result_data = result.fetchall()
+                    for row in result_data:
+                        assert row[0] in grant.privileges
+
+        # check row level security enabled
+        tables_to_check = []
+        for component in components:
+            for policy in component.policies:
+                tables_to_check.append(policy.table)
+
+        # dedupe
+        tables_to_check = set(tables_to_check)
+        formatted_tables = ", ".join([f"'{table}'" for table in tables_to_check])
+
+        statement = text("SELECT rowsecurity FROM pg_catalog.pg_tables " f"WHERE tablename IN ({formatted_tables})")
+        result = conn.execute(statement)
+        result_data = result.fetchall()
+        assert len(result_data) == len(tables_to_check)

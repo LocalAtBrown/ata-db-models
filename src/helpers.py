@@ -85,7 +85,7 @@ def assign_role(conn: Connection, role: str, usernames: list[str]) -> Result:
 
 
 def grant_privileges(conn: Connection, user_or_role: str, table: str, privileges: list[Privilege]) -> Result:
-    formatted_privileges = " ".join(privileges)
+    formatted_privileges = ", ".join(privileges)
     statement = text(f"GRANT {formatted_privileges} ON {table} TO {user_or_role}")
     return conn.execute(statement)
 
@@ -93,8 +93,8 @@ def grant_privileges(conn: Connection, user_or_role: str, table: str, privileges
 def enable_row_level_security(conn: Connection, table: str, target_column: str, role: str) -> None:
     s1 = text(f"ALTER TABLE {table} ENABLE ROW LEVEL SECURITY")
     conn.execute(s1)
-    random_prefix = "%06x" % random.randrange(16**6)
-    policy_name = f"{random_prefix}-{table}-{role}"
+    random_postfix = "%06x" % random.randrange(16**6)
+    policy_name = f"{table}_{role}_{random_postfix}"
     s2 = text(f"CREATE POLICY {policy_name} ON {table} TO {role} USING (current_user LIKE '%' || {target_column} || '%')")
     conn.execute(s2)
 

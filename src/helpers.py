@@ -3,7 +3,6 @@ import random
 from dataclasses import dataclass
 from enum import Enum
 
-from sqlalchemy.engine import Result
 from sqlalchemy.future.engine import Connection
 from sqlmodel import text
 
@@ -62,32 +61,32 @@ class Component:
     policies: list[RowLevelSecurityPolicy]
 
 
-def create_database(conn: Connection, db_name: Stage) -> Result:
+def create_database(conn: Connection, db_name: Stage) -> None:
     statement = text(f"CREATE DATABASE {db_name}")
-    return conn.execution_options(isolation_level="AUTOCOMMIT").execute(statement)
+    conn.execution_options(isolation_level="AUTOCOMMIT").execute(statement)
 
 
-def create_role(conn: Connection, role: str) -> Result:
+def create_role(conn: Connection, role: str) -> None:
     statement = text(f"CREATE ROLE {role}")
-    return conn.execute(statement)
+    conn.execute(statement)
 
 
-def create_user(conn: Connection, username: str) -> Result:
+def create_user(conn: Connection, username: str) -> None:
     # TODO password
     statement = text(f"CREATE USER {username} WITH PASSWORD :password")
-    return conn.execute(statement, {"password": "todo"})
+    conn.execute(statement, {"password": "todo"})
 
 
-def assign_role(conn: Connection, role: str, usernames: list[str]) -> Result:
+def assign_role(conn: Connection, role: str, usernames: list[str]) -> None:
     users = ", ".join(usernames)
     statement = text(f"GRANT {role} TO {users}")
-    return conn.execute(statement)
+    conn.execute(statement)
 
 
-def grant_privileges(conn: Connection, user_or_role: str, table: str, privileges: list[Privilege]) -> Result:
+def grant_privileges(conn: Connection, user_or_role: str, table: str, privileges: list[Privilege]) -> None:
     formatted_privileges = ", ".join(privileges)
     statement = text(f"GRANT {formatted_privileges} ON {table} TO {user_or_role}")
-    return conn.execute(statement)
+    conn.execute(statement)
 
 
 def enable_row_level_security(conn: Connection, table: str, target_column: str, role: str) -> None:

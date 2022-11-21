@@ -69,9 +69,9 @@ if __name__ == "__main__":
     pipeline0 = Component(
         name="pipeline0",
         grants=[
-            Grant(privileges=[Privilege.SELECT, Privilege.INSERT, Privilege.UPDATE, Privilege.DELETE], tables=["events"])
+            Grant(privileges=[Privilege.SELECT, Privilege.INSERT, Privilege.UPDATE, Privilege.DELETE], tables=["event"])
         ],
-        policies=[RowLevelSecurityPolicy(table="events", user_column="partner")],
+        policies=[RowLevelSecurityPolicy(table="event", user_column="site_name")],
     )
     components = [pipeline0]
     partner_names = [Partner.afro_la, Partner.dallas_free_press, Partner.open_vallejo, Partner.the_19th]

@@ -23,15 +23,15 @@ def components():
     pipeline_uno = Component(
         name="pipeline_uno",
         grants=[
-            Grant(privileges=[Privilege.SELECT, Privilege.INSERT, Privilege.UPDATE, Privilege.DELETE], tables=["events"])
+            Grant(privileges=[Privilege.SELECT, Privilege.INSERT, Privilege.UPDATE, Privilege.DELETE], tables=["event"])
         ],
-        policies=[RowLevelSecurityPolicy(table="events", user_column="partner")],
+        policies=[RowLevelSecurityPolicy(table="event", user_column="site_name")],
     )
 
     pipeline_duo = Component(
         name="pipeline_duo",
-        grants=[Grant(privileges=[Privilege.SELECT], tables=["events"])],
-        policies=[RowLevelSecurityPolicy(table="events", user_column="partner")],
+        grants=[Grant(privileges=[Privilege.SELECT], tables=["event"])],
+        policies=[RowLevelSecurityPolicy(table="event", user_column="site_name")],
     )
 
     return [pipeline_uno, pipeline_duo]

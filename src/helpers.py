@@ -53,6 +53,7 @@ class Grant:
 
 @dataclass
 class RowLevelSecurityPolicy:
+    # TODO have table and user_column reference actual Table and Column objects
     table: str
     user_column: str
     policy_name: str | None = None

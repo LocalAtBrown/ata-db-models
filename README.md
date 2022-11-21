@@ -14,6 +14,15 @@ Database models and migrations for Automating the Ask.
 
 ## Usage
 
+### As a package
+
+We use [SQLModel](https://sqlmodel.tiangolo.com/), a layer on top of SQLAlchemy with Pydantic, to define our tables.
+This is useful because we can import this package to interact with the tables AND have Pydantic objects in Python
+that correspond to a row in the table.
+
+To install the package from PyPi, run: `pip install ata-models`. Check existing versions 
+[here](https://pypi.org/project/ata-models/).
+
 ### Initialize a new cluster
 
 If you want to initialize a fresh database cluster, pass in the env vars to connect to the cluster and run `init_db`.

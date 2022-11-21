@@ -103,11 +103,15 @@ def create_users(conn: Connection, usernames: list[str]) -> None:
         create_user(conn, username=username)
 
 
-def get_conn_string(db_name: str) -> str:
+def get_conn_string(db_name: str | None = None) -> str:
     # everything but dbname should be the same, since we are using the admin user for everything
     host = os.getenv("HOST", "localhost")
     port = os.getenv("PORT", "5432")
     user = os.getenv("USERNAME", "postgres")
     password = os.getenv("PASSWORD", "postgres")
+    if not db_name:
+        # if no db_name is passed, we assume it is for the default db. This is assumed to be "default"
+        # unless indicated otherwise via this DB_NAME env var
+        db_name = os.getenv("DB_NAME", "default")
 
     return f"postgresql://{user}:{password}@{host}:{port}/{db_name}"

@@ -14,9 +14,24 @@ Database models and migrations for Automating the Ask.
 
 ## Usage
 
-TODO: Describe how to use your project!
-TODO: Do you need an installation, contributing, community, documentation, or other section here?
-Depends on the project, make sure to add it if it makes sense to do so.
+### Initialize a new cluster
+
+If you want to initialize a fresh database cluster, pass in the env vars to connect to the cluster and run `init_db`.
+If the target cluster has IP restrictions, make sure your IP address is a valid access point.
+
+An example run with fake credentials (from the root dir of this project with the virtual env
+activated):
+`HOST=fakehost USER=fakeuser PASSWORD=fakepw python src/init_db.py`
+
+No `PORT` is passed because the default port is 5432, the standard for Postgres. No `DB_NAME` is passed
+because we intend to use the default database name of, well, `default`. Both of these can be overriden.
+
+### Migrations
+
+So you made some changes to what tables there are, what columns there are, indices, etc. and you'd like to
+update the databases. This is what alembic is for!
+
+ TODO ALEMBIC INSTRUCTIONS
 
 ## Development
 

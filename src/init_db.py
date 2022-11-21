@@ -19,7 +19,7 @@ from src.models import SQLModel
 
 
 def pre_table_initialization(stage: Stage, components: list[Component], partner_names: list[Partner]) -> None:
-    engine = create_engine(get_conn_string(db_name="postgres"))
+    engine = create_engine(get_conn_string())
 
     with engine.connect() as conn:
         create_database(conn, db_name=stage)
@@ -65,7 +65,7 @@ def initialize_all_database_entities(stage: Stage, components: list[Component], 
     post_table_initialization(stage=stage, components=components)
 
 
-def main() -> None:
+if __name__ == "__main__":
     stages = [Stage.dev, Stage.prod]
     pipeline0 = Component(
         name="pipeline0",

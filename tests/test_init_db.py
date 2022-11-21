@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy import create_engine, text
 
-from src.helpers import (
+from ata_models.helpers import (
     Component,
     Grant,
     Partner,
@@ -10,12 +10,12 @@ from src.helpers import (
     Stage,
     get_conn_string,
 )
-from src.init_db import (
+from ata_models.init_db import (
     initialize_tables,
     post_table_initialization,
     pre_table_initialization,
 )
-from src.models import SQLModel
+from ata_models.models import SQLModel
 
 
 @pytest.fixture

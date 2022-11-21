@@ -14,9 +14,23 @@ Database models and migrations for Automating the Ask.
 
 ## Usage
 
-TODO: Describe how to use your project!
-TODO: Do you need an installation, contributing, community, documentation, or other section here?
-Depends on the project, make sure to add it if it makes sense to do so.
+### Initialize a new cluster
+
+If you want to initialize a fresh database cluster, pass in the env vars to connect to the cluster and run `init_db`.
+If the target cluster has IP restrictions, make sure your IP address is a valid access point.
+
+An example run with fake credentials (from the root dir of this project with the virtual env
+activated):
+`HOST=fakehost USER=fakeuser PASSWORD=fakepw DB_NAME=postgres python src/init_db.py`
+
+No `PORT` is passed because the default port is 5432, the standard for Postgres.
+
+### Migrations
+
+So you made some changes to what tables there are, what columns there are, indices, etc. and you'd like to
+update the databases. This is what alembic is for!
+
+ TODO ALEMBIC INSTRUCTIONS
 
 ## Development
 
@@ -45,7 +59,7 @@ to see more options.
 
 ### Run Static Type Checking
 
-To manually run mypy, simply run `mypy .` from the root directory of the project. It will use the default configuration
+To manually run mypy, simply run `mypy` from the root directory of the project. It will use the default configuration
 specified in `pyproject.toml`.
 
 ### Update Dependencies
@@ -59,8 +73,11 @@ is to run a Docker container, then run the tests while it is active.
 
 1. (If you don't already have the image locally) Run `docker pull postgres`
 2. Run `docker run --rm --name postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_HOST_AUTH_METHOD=trust -p 127.0.0.1:5432:5432/tcp postgres`
-3. Run `pytest tests` from the root directory of the project. Explore the `pytest` docs (linked above)
+3. Run `DB_NAME=postgres pytest tests` from the root directory of the project. Explore the `pytest` docs (linked above)
 to see more options.
 
 Note that if you decide to run the Postgres container with different credentials (a different password, port, etc.) or
 via a different method, you will likely need to update the test file to point to the correct Postgres instance.
+
+Additionally, if you want to re-run the tests, you want to make sure you start over from a fresh Postgres
+instance. If you run Postgres via Docker, you can simply `ctrl-C` to stop the image and start a new one.

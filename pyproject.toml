@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ata_models"
+name = "ata-models"
 version = "0.0.1"
 description = "Database models and migrations for Automating the Ask."
 authors = ["Raaid Arshad <raaid@protonmail.com>"]

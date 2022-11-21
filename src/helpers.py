@@ -126,7 +126,7 @@ def enable_row_level_security(conn: Connection, table: str, target_column: str, 
     conn.execute(s2)
 
 
-def create_users(conn: Connection, stage: Stage, component: Component, partner_names: list[str]) -> None:
+def create_users(conn: Connection, stage: Stage, component: Component, partner_names: list[Partner]) -> None:
     ssm_client = get_ssm_client()
     for partner_name in partner_names:
         username = f"{stage}_{component.name}_{partner_name}"
@@ -166,3 +166,5 @@ def get_ssm_client() -> SSMClient | None:
     # ENABLE_SSM has to explicitly be set to exactly "TRUE" or else no SSM interactions take place
     if os.getenv("ENABLE_SSM", "FALSE") == "TRUE":
         return boto3.client("ssm")
+    else:
+        return None

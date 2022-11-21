@@ -1,6 +1,6 @@
 from sqlalchemy.future.engine import create_engine
 
-from src.helpers import (
+from ata_models.helpers import (
     Component,
     Grant,
     Partner,
@@ -15,7 +15,7 @@ from src.helpers import (
     get_conn_string,
     grant_privileges,
 )
-from src.models import SQLModel
+from ata_models.models import SQLModel
 
 
 def pre_table_initialization(stage: Stage, components: list[Component], partner_names: list[Partner]) -> None:

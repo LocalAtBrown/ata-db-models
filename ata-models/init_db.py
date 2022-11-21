@@ -1,5 +1,4 @@
 from sqlalchemy.future.engine import create_engine
-
 from src.helpers import (
     Component,
     Grant,

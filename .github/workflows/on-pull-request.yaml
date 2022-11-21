@@ -43,4 +43,4 @@ jobs:
     - name: run mypy
       run: mypy
     - name: run tests
-      run: pytest tests
+      run: DB_NAME=postgres pytest tests

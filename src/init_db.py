@@ -27,9 +27,8 @@ def pre_table_initialization(stage: Stage, components: list[Component], partner_
             role = f"{stage}_{component.name}"
             create_role(conn, role=role)
             usernames = [f"{stage}_{component.name}_{partner_name}" for partner_name in partner_names]
-            create_users(conn, usernames=usernames)
+            create_users(conn, stage=stage, component=component, partner_names=partner_names)
             assign_role(conn, role=role, usernames=usernames)
-            # TODO store creds per user in SSM (db, host, port, usr, pw) or conn_string
         conn.commit()
 
 

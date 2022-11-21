@@ -10,7 +10,7 @@ readme = "README.md"
 python = "3.10.8"
 alembic = "1.8.1"
 boto3 = "1.26.13"
-boto3-stubs = "1.26.13"
+boto3-stubs = {version = "1.26.13", extras = ["ssm"]}
 psycopg2 = "2.9.5"
 sqlmodel = "0.0.8"
 

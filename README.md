@@ -21,10 +21,9 @@ If the target cluster has IP restrictions, make sure your IP address is a valid 
 
 An example run with fake credentials (from the root dir of this project with the virtual env
 activated):
-`HOST=fakehost USER=fakeuser PASSWORD=fakepw python src/init_db.py`
+`HOST=fakehost USER=fakeuser PASSWORD=fakepw DB_NAME=postgres python src/init_db.py`
 
-No `PORT` is passed because the default port is 5432, the standard for Postgres. No `DB_NAME` is passed
-because we intend to use the default database name of, well, `default`. Both of these can be overriden.
+No `PORT` is passed because the default port is 5432, the standard for Postgres.
 
 ### Migrations
 
@@ -74,7 +73,7 @@ is to run a Docker container, then run the tests while it is active.
 
 1. (If you don't already have the image locally) Run `docker pull postgres`
 2. Run `docker run --rm --name postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_HOST_AUTH_METHOD=trust -p 127.0.0.1:5432:5432/tcp postgres`
-3. Run `pytest tests` from the root directory of the project. Explore the `pytest` docs (linked above)
+3. Run `DB_NAME=postgres pytest tests` from the root directory of the project. Explore the `pytest` docs (linked above)
 to see more options.
 
 Note that if you decide to run the Postgres container with different credentials (a different password, port, etc.) or

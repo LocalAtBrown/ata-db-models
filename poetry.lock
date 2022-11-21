@@ -53,6 +53,7 @@ python-versions = ">=3.7"
 
 [package.dependencies]
 botocore-stubs = "*"
+mypy-boto3-ssm = {version = ">=1.26.0,<1.27.0", optional = true, markers = "extra == \"ssm\""}
 types-s3transfer = "*"
 typing-extensions = ">=4.1.0"
 
@@ -539,6 +540,17 @@ python2 = ["typed-ast (>=1.4.0,<2)"]
 reports = ["lxml"]
 
 [[package]]
+name = "mypy-boto3-ssm"
+version = "1.26.11.post1"
+description = "Type annotations for boto3.SSM 1.26.11 service generated with mypy-boto3-builder 7.11.10"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+typing-extensions = ">=4.1.0"
+
+[[package]]
 name = "mypy-extensions"
 version = "0.4.3"
 description = "Experimental type system extensions for programs checked with the mypy typechecker."
@@ -859,7 +871,7 @@ testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7
 [metadata]
 lock-version = "1.1"
 python-versions = "3.10.8"
-content-hash = "3782e23f9d9c7774e3113c9fbe0182051d342b15be396699dbf6926a0592cf91"
+content-hash = "7f24016d630cef4b75052e340a18caa35dbc60601a3feea93140d0bf936ae8a1"
 
 [metadata.files]
 alembic = [
@@ -1050,6 +1062,10 @@ mypy = [
     {file = "mypy-0.961-cp39-cp39-win_amd64.whl", hash = "sha256:1ece702f29270ec6af25db8cf6185c04c02311c6bb21a69f423d40e527b75c56"},
     {file = "mypy-0.961-py3-none-any.whl", hash = "sha256:03c6cc893e7563e7b2949b969e63f02c000b32502a1b4d1314cabe391aa87d66"},
     {file = "mypy-0.961.tar.gz", hash = "sha256:f730d56cb924d371c26b8eaddeea3cc07d78ff51c521c6d04899ac6904b75492"},
+]
+mypy-boto3-ssm = [
+    {file = "mypy-boto3-ssm-1.26.11.post1.tar.gz", hash = "sha256:5aad9ea2979b9321679298f61b6cdf7ac8941b695d2dca5cd36c7d9069dcda8d"},
+    {file = "mypy_boto3_ssm-1.26.11.post1-py3-none-any.whl", hash = "sha256:adacff335f0767c0e4d456621bfb8c42cb7f34adccb36789195a4babbd29a29b"},
 ]
 mypy-extensions = [
     {file = "mypy_extensions-0.4.3-py2.py3-none-any.whl", hash = "sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d"},

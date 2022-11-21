@@ -1,8 +1,13 @@
+import json
 import os
 import random
+import secrets
+import string
 from dataclasses import dataclass
 from enum import Enum
 
+import boto3
+from mypy_boto3_ssm import SSMClient
 from sqlalchemy.future.engine import Connection
 from sqlmodel import text
 
@@ -61,6 +66,15 @@ class Component:
     policies: list[RowLevelSecurityPolicy]
 
 
+@dataclass
+class DatabaseConnectionCredentials:
+    HOST: str
+    PORT: int
+    DB_NAME: str
+    USERNAME: str
+    PASSWORD: str
+
+
 def create_database(conn: Connection, db_name: Stage) -> None:
     statement = text(f"CREATE DATABASE {db_name}")
     conn.execution_options(isolation_level="AUTOCOMMIT").execute(statement)
@@ -71,10 +85,24 @@ def create_role(conn: Connection, role: str) -> None:
     conn.execute(statement)
 
 
-def create_user(conn: Connection, username: str) -> None:
-    # TODO password
+def generate_password() -> str:
+    alphabet = string.ascii_letters + string.digits
+    while True:
+        password = "".join(secrets.choice(alphabet) for i in range(10))
+        if (
+            any(c.islower() for c in password)
+            and any(c.isupper() for c in password)
+            and sum(c.isdigit() for c in password) >= 3
+        ):
+            break
+    return password
+
+
+def create_user(conn: Connection, username: str) -> str:
+    pw = generate_password()
     statement = text(f"CREATE USER {username} WITH PASSWORD :password")
-    conn.execute(statement, {"password": "todo"})
+    conn.execute(statement, {"password": pw})
+    return pw
 
 
 def assign_role(conn: Connection, role: str, usernames: list[str]) -> None:
@@ -98,9 +126,26 @@ def enable_row_level_security(conn: Connection, table: str, target_column: str, 
     conn.execute(s2)
 
 
-def create_users(conn: Connection, usernames: list[str]) -> None:
-    for username in usernames:
-        create_user(conn, username=username)
+def create_users(conn: Connection, stage: Stage, component: Component, partner_names: list[str]) -> None:
+    ssm_client = get_ssm_client()
+    for partner_name in partner_names:
+        username = f"{stage}_{component.name}_{partner_name}"
+        pw = create_user(conn, username=username)
+        if ssm_client:
+            user_creds = DatabaseConnectionCredentials(
+                HOST=os.getenv("HOST", "localhost"),
+                PORT=int(os.getenv("PORT", "5432")),
+                DB_NAME=stage,
+                USERNAME=username,
+                PASSWORD=pw,
+            )
+            ssm_client.put_parameter(
+                Name=f"/{stage}/ata/{partner_name}/{component.name}/database-credentials",
+                Description=f"DB credentials for partner {partner_name}, component {component}, and env {stage}.",
+                Value=json.dumps(user_creds.__dict__),
+                Type="String",
+                Overwrite=True,
+            )
 
 
 def get_conn_string(db_name: str | None = None) -> str:
@@ -115,3 +160,9 @@ def get_conn_string(db_name: str | None = None) -> str:
         db_name = os.getenv("DB_NAME", "default")
 
     return f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
+
+
+def get_ssm_client() -> SSMClient | None:
+    # ENABLE_SSM has to explicitly be set to exactly "TRUE" or else no SSM interactions take place
+    if os.getenv("ENABLE_SSM", "FALSE") == "TRUE":
+        return boto3.client("ssm")

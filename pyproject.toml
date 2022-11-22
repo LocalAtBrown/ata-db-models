@@ -7,7 +7,7 @@ repository = "https://github.com/LocalAtBrown/ata-models"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.10.8"
+python = ">=3.9, <3.10"
 alembic = "1.8.1"
 boto3 = "1.26.13"
 boto3-stubs = {version = "1.26.13", extras = ["ssm"]}

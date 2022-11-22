@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import HttpUrl
 from sqlmodel import Column, Field, SQLModel, String
@@ -34,24 +35,24 @@ class Event(SQLModel, table=True):
     page_referrer: HttpUrl = Field(sa_column=Column(String))
     # Maximum page y-offset seen in the last ping period. Depends on event_name == "page_ping"
     # TODO might be optional/nullable
-    pp_yoffset_max: float | None = None
+    pp_yoffset_max: Optional[float] = None
     # Type of referer. Can be "social", "search", "internal", "unknown", "email"
     # (read: https://docs.snowplow.io/docs/enriching-your-data/available-enrichments/referrer-parser-enrichment/)
     # TODO consider making this an enum
     refr_medium: str
     # Name of referer if recognised, e.g., "Google" or "Bing"
-    refr_source: str | None = None
+    refr_source: Optional[str] = None
     # Data/attributes of HTML input and its form in JSON format. Only present if event_name == "change_form"
     # (read: https://github.com/snowplow/iglu-central/blob/master/schemas/com.snowplowanalytics.snowplow/change_form/jsonschema/1-0-0)
     # TODO probably optional and json
-    semistruct_form_change: str | None = None
+    semistruct_form_change: Optional[str] = None
     # Data/attributes of HTML input and its form in JSON format. Only present if event_name == "focus_form"
     # (read: https://github.com/snowplow/iglu-central/blob/master/schemas/com.snowplowanalytics.snowplow/focus_form/jsonschema/1-0-0)
     # TODO probably optional and json
-    semistruct_form_focus: str | None = None
+    semistruct_form_focus: Optional[str] = None
     # Data/attributes of HTML form and all its inputs in JSON format. Only present if event_name == "submit_form"
     # (read: https://github.com/snowplow/iglu-central/blob/master/schemas/com.snowplowanalytics.snowplow/submit_form/jsonschema/1-0-0)
     # TODO probably optional and json
-    semistruct_form_submit: str | None = None
+    semistruct_form_submit: Optional[str] = None
     # Raw useragent
     useragent: str

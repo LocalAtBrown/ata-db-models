@@ -386,7 +386,7 @@ xray = ["mypy-boto3-xray (>=1.26.0,<1.27.0)"]
 
 [[package]]
 name = "botocore"
-version = "1.29.13"
+version = "1.29.14"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
 optional = false
@@ -683,7 +683,7 @@ optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
-pytest = {version = ">=6.2.4", markers = "python_version >= \"3.10\""}
+pytest = {version = ">=5.0", markers = "python_version < \"3.10\""}
 
 [[package]]
 name = "python-dateutil"
@@ -870,8 +870,8 @@ testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7
 
 [metadata]
 lock-version = "1.1"
-python-versions = "3.10.8"
-content-hash = "7f24016d630cef4b75052e340a18caa35dbc60601a3feea93140d0bf936ae8a1"
+python-versions = ">=3.9, <3.10"
+content-hash = "ad3f59a28db68ec339789b4ff89c5e3bb0e96fd2543a7d0dc0a1372591574e90"
 
 [metadata.files]
 alembic = [
@@ -891,8 +891,8 @@ boto3-stubs = [
     {file = "boto3_stubs-1.26.13-py3-none-any.whl", hash = "sha256:466f1d3bfb8d17cef05ab75d459004411c08a74d247f0d38f6c3706005f7fc1c"},
 ]
 botocore = [
-    {file = "botocore-1.29.13-py3-none-any.whl", hash = "sha256:9c73a180fad9a7da7797530ced3b5069872bff915b1ae9fa11fc1ed79b584c8e"},
-    {file = "botocore-1.29.13.tar.gz", hash = "sha256:9d39db398f472c0aa97098870c8c4cf12636b2667a18e694fea5fae046af907e"},
+    {file = "botocore-1.29.14-py3-none-any.whl", hash = "sha256:208ca5c3d8299d45a19b912dc791e3297d2961873ff37131d4fc3eb86365645c"},
+    {file = "botocore-1.29.14.tar.gz", hash = "sha256:20fb0978beac90fd8c45b57936f2c1c182e19f1622b09a481a050723632a485c"},
 ]
 botocore-stubs = [
     {file = "botocore_stubs-1.29.13-py3-none-any.whl", hash = "sha256:7c1c1da7c170207f9ee3c7ea131429b8f4248cc23157be8f8d9e07096e351b6d"},

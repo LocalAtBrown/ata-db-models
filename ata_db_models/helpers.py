@@ -5,6 +5,7 @@ import secrets
 import string
 from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
 
 import boto3
 from mypy_boto3_ssm import SSMClient
@@ -56,7 +57,7 @@ class RowLevelSecurityPolicy:
     # TODO have table and user_column reference actual Table and Column objects
     table: str
     user_column: str
-    policy_name: str | None = None
+    policy_name: Optional[str] = None
 
 
 @dataclass
@@ -149,7 +150,7 @@ def create_users(conn: Connection, stage: Stage, component: Component, partner_n
             )
 
 
-def get_conn_string(db_name: str | None = None) -> str:
+def get_conn_string(db_name: Optional[str] = None) -> str:
     # everything but dbname should be the same, since we are using the admin user for everything
     host = os.getenv("HOST", "localhost")
     port = os.getenv("PORT", "5432")
@@ -163,7 +164,7 @@ def get_conn_string(db_name: str | None = None) -> str:
     return f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
 
 
-def get_ssm_client() -> SSMClient | None:
+def get_ssm_client() -> Optional[SSMClient]:
     # ENABLE_SSM has to explicitly be set to exactly "TRUE" or else no SSM interactions take place
     if os.getenv("ENABLE_SSM", "FALSE") == "TRUE":
         return boto3.client("ssm")

@@ -3,7 +3,7 @@
 <!-- [![Release](https://img.shields.io/github/v/release/LocalAtBrown/ata-db-models)](https://img.shields.io/github/v/release/LocalAtBrown/ata-db-models) -->
 <!-- [![Build status](https://img.shields.io/github/workflow/status/LocalAtBrown/ata-db-models/merge-to-main)](https://img.shields.io/github/workflow/status/LocalAtBrown/ata-db-models/merge-to-main) -->
 
-[![Python version](https://img.shields.io/badge/python_version-3.10-blue)](https://github.com/psf/black)
+[![Python version](https://img.shields.io/badge/python_version-3.9-blue)](https://github.com/psf/black)
 [![Code style with black](https://img.shields.io/badge/code_style-black-000000.svg)](https://github.com/psf/black)
 [![More style with flake8](https://img.shields.io/badge/code_style-flake8-blue)](https://flake8.pycqa.org)
 [![Imports with isort](https://img.shields.io/badge/%20imports-isort-blue)](https://pycqa.github.io/isort/)

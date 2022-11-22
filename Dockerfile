@@ -13,5 +13,5 @@ FROM python:3.10.8-slim as runner
 # run any updates and run dependencies here
 RUN apt-get update && apt-get install --no-install-recommends -y libpq-dev
 COPY --from=builder /root/.local /root/.local
-COPY /ata_models/ /src/
+COPY /ata_db_models/ /src/
 ENV PATH=/root/.local/bin:$PATH

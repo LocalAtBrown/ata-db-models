@@ -3,8 +3,8 @@ from datetime import datetime
 import pytest
 from sqlmodel import Session, create_engine, select
 
-from ata_models.helpers import Partner
-from ata_models.models import Event, SQLModel
+from ata_db_models.helpers import Partner
+from ata_db_models.models import Event, SQLModel
 
 engine = create_engine("postgresql://postgres:postgres@localhost:5432/postgres")
 

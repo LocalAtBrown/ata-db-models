@@ -1,14 +1,14 @@
-# ata-models
+# ata-db-models
 
-<!-- [![Release](https://img.shields.io/github/v/release/LocalAtBrown/ata-models)](https://img.shields.io/github/v/release/LocalAtBrown/ata-models) -->
-<!-- [![Build status](https://img.shields.io/github/workflow/status/LocalAtBrown/ata-models/merge-to-main)](https://img.shields.io/github/workflow/status/LocalAtBrown/ata-models/merge-to-main) -->
+<!-- [![Release](https://img.shields.io/github/v/release/LocalAtBrown/ata-db-models)](https://img.shields.io/github/v/release/LocalAtBrown/ata-db-models) -->
+<!-- [![Build status](https://img.shields.io/github/workflow/status/LocalAtBrown/ata-db-models/merge-to-main)](https://img.shields.io/github/workflow/status/LocalAtBrown/ata-db-models/merge-to-main) -->
 
 [![Python version](https://img.shields.io/badge/python_version-3.10-blue)](https://github.com/psf/black)
 [![Code style with black](https://img.shields.io/badge/code_style-black-000000.svg)](https://github.com/psf/black)
 [![More style with flake8](https://img.shields.io/badge/code_style-flake8-blue)](https://flake8.pycqa.org)
 [![Imports with isort](https://img.shields.io/badge/%20imports-isort-blue)](https://pycqa.github.io/isort/)
 [![Type checking with mypy](https://img.shields.io/badge/type_checker-mypy-blue)](https://mypy.readthedocs.io)
-[![License](https://img.shields.io/github/license/LocalAtBrown/ata-models)](https://img.shields.io/github/license/LocalAtBrown/ata-models)
+[![License](https://img.shields.io/github/license/LocalAtBrown/ata-db-models)](https://img.shields.io/github/license/LocalAtBrown/ata-db-models)
 
 Database models and migrations for Automating the Ask.
 
@@ -20,8 +20,8 @@ We use [SQLModel](https://sqlmodel.tiangolo.com/), a layer on top of SQLAlchemy 
 This is useful because we can import this package to interact with the tables AND have Pydantic objects in Python
 that correspond to a row in the table.
 
-To install the package from PyPi, run: `pip install ata-models`. Check existing versions 
-[here](https://pypi.org/project/ata-models/).
+To install the package from PyPi, run: `pip install ata-db-models`. Check existing versions 
+[here](https://pypi.org/project/ata-db-models/).
 
 ### Initialize a new cluster
 

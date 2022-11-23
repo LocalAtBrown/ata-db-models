@@ -28,7 +28,7 @@ class Event(SQLModel, table=True):
     # TODO make enum
     event_name: str
     # User ID set by Snowplow using 3rd party cookie
-    network_userid: str
+    network_userid: UUID
     # [STR, CATEGORICAL if needed] Path to page, e.g., /event-directory/ in https://dallasfreepress.com/event-directory/
     # TODO make regex validation
     page_urlpath: str

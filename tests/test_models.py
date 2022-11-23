@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import uuid4
 
 import pytest
 from sqlmodel import Session, create_engine, select
@@ -22,12 +23,12 @@ def test_insert_data():
         derived_tstamp=datetime.now(),
         doc_height=1,
         domain_sessionidx=1,
-        domain_userid="fake-domain-id",
+        domain_userid=uuid4(),
         dvce_screenheight=400,
         dvce_screenwidth=400,
-        event_id="fake-event-id",
+        event_id=uuid4(),
         event_name="page_ping",
-        network_userid="fake-network-id",
+        network_userid=uuid4(),
         page_urlpath="/path/to/fake/article",
         page_referrer="https://www.fake.com",
         pp_yoffset_max=1,

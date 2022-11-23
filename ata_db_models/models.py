@@ -16,7 +16,7 @@ class Event(SQLModel, table=True):
     # Number of the current user session, e.g. first session is 1, next session is 2, etc. Dependent on domain_userid
     domain_sessionidx: int
     # User ID set by Snowplow using 1st party cookie
-    domain_userid: str
+    domain_userid: UUID
     # Screen height in pixels. Almost 1-to-1 relationship with domain_userid (there are exceptions)
     dvce_screenheight: float
     # Screen width in pixels. Almost 1-to-1 relationship with domain_userid (there are exceptions)

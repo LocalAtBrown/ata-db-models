@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Optional
+from uuid import UUID
 
 from pydantic import HttpUrl
 from sqlmodel import Column, Field, SQLModel, String
@@ -22,7 +23,7 @@ class Event(SQLModel, table=True):
     dvce_screenwidth: float
     # ID of event. This would be the primary key within the site DataFrame,
     # and part of the [site_name, event_id] composite key in the database table
-    event_id: str = Field(primary_key=True)
+    event_id: UUID = Field(primary_key=True)
     # Name of event. Can be "page_view", "page_ping", "focus_form", "change_form", "submit_form"
     # TODO make enum
     event_name: str

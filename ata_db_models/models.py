@@ -46,14 +46,14 @@ class Event(SQLModel, table=True):
     # Data/attributes of HTML input and its form in JSON format. Only present if event_name == "change_form"
     # (read: https://github.com/snowplow/iglu-central/blob/master/schemas/com.snowplowanalytics.snowplow/change_form/jsonschema/1-0-0)
     # TODO probably optional and json
-    unstruct_event_com_snowplowanalytics_snowplow_change_form_1: Union[list, dict] = Field(sa_column=Column(JSON))  # type: ignore
+    unstruct_event_com_snowplowanalytics_snowplow_change_form_1: Optional[Union[list, dict]] = Field(sa_column=Column(JSON))  # type: ignore
     # Data/attributes of HTML input and its form in JSON format. Only present if event_name == "focus_form"
     # (read: https://github.com/snowplow/iglu-central/blob/master/schemas/com.snowplowanalytics.snowplow/focus_form/jsonschema/1-0-0)
     # TODO probably optional and json
-    unstruct_event_com_snowplowanalytics_snowplow_focus_form_1: Union[list, dict] = Field(sa_column=Column(JSON))  # type: ignore
+    unstruct_event_com_snowplowanalytics_snowplow_focus_form_1: Optional[Union[list, dict]] = Field(sa_column=Column(JSON))  # type: ignore
     # Data/attributes of HTML form and all its inputs in JSON format. Only present if event_name == "submit_form"
     # (read: https://github.com/snowplow/iglu-central/blob/master/schemas/com.snowplowanalytics.snowplow/submit_form/jsonschema/1-0-0)
     # TODO probably optional and json
-    unstruct_event_com_snowplowanalytics_snowplow_submit_form_1: Union[list, dict] = Field(sa_column=Column(JSON))  # type: ignore
+    unstruct_event_com_snowplowanalytics_snowplow_submit_form_1: Optional[Union[list, dict]] = Field(sa_column=Column(JSON))  # type: ignore
     # Raw useragent
     useragent: str

@@ -3,7 +3,7 @@ from typing import Optional, Union
 from uuid import UUID
 
 from pydantic import HttpUrl
-from sqlmodel import Column, Field, JSON, SQLModel, String
+from sqlmodel import JSON, Column, Field, SQLModel, String
 
 
 class Event(SQLModel, table=True):

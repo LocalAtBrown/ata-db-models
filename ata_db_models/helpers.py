@@ -159,7 +159,7 @@ def get_conn_string(db_name: Optional[str] = None) -> str:
     if not db_name:
         # if no db_name is passed, we assume it is for the default db. This is assumed to be "default"
         # unless indicated otherwise via this DB_NAME env var
-        db_name = os.getenv("DB_NAME", "default")
+        db_name = os.getenv("DB_NAME", "postgres")
 
     return f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
 

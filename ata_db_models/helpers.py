@@ -124,7 +124,9 @@ def enable_row_level_security(conn: Connection, table: str, target_column: str, 
     conn.execute(s1)
     random_postfix = "%06x" % random.randrange(16**6)
     policy_name = f"{table}_{role}_{random_postfix}"
-    s2 = text(f"CREATE POLICY {policy_name} ON {table} TO {role} USING (current_user LIKE '%' || {target_column} || '%')")
+    s2 = text(
+        f"CREATE POLICY {policy_name} ON {table} TO {role} USING (current_user ~ REPLACE({target_column}, '-', '_'))"
+    )
     conn.execute(s2)
 
 

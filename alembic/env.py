@@ -9,7 +9,9 @@ from ata_db_models.models import SQLModel
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option("sqlalchemy.url", os.getenv("DB_CONNECTION_STRING"))
+config.set_main_option(
+    "sqlalchemy.url", os.getenv("DB_CONNECTION_STRING", "postgresql://postgres:postgres@localhost:5432/postgres")
+)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

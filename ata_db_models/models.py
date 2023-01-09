@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, Union
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from pydantic import HttpUrl
 from sqlmodel import JSON, Column, Field, SQLModel, String
@@ -53,3 +53,11 @@ class Event(SQLModel, table=True):
     unstruct_event_com_snowplowanalytics_snowplow_submit_form_1: Optional[Union[list, dict]] = Field(sa_column=Column(JSON))  # type: ignore
     # Raw useragent
     useragent: str
+
+
+class Prescription(SQLModel, table=True):
+    id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True, nullable=False)
+    prescribe: bool
+    last_updated: datetime
+    # TODO will add this once we have models to work with!
+    # model_id: UUID = Field(foreign_key="model.id")

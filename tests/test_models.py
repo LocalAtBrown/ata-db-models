@@ -5,7 +5,7 @@ import pytest
 from sqlmodel import Session, create_engine, select
 
 from ata_db_models.helpers import Partner
-from ata_db_models.models import Event, SQLModel
+from ata_db_models.models import Event, Prescription, SQLModel
 
 engine = create_engine("postgresql://postgres:postgres@localhost:5432/postgres")
 
@@ -17,7 +17,7 @@ def test_create_tables():
 
 
 @pytest.mark.order(5)
-def test_insert_data():
+def test_insert_event_data() -> None:
     fake_event = Event(
         site_name=Partner.afro_la,
         derived_tstamp=datetime.now(),
@@ -44,3 +44,18 @@ def test_insert_data():
     results = session.exec(statement)
     db_event = results.first()
     assert fake_event == db_event
+
+
+@pytest.mark.order(6)
+def test_insert_prescription_data() -> None:
+    fake_prescription = Prescription(id=uuid4(), prescribe=True, last_updated=datetime.now())
+
+    session = Session(engine)
+    session.add(fake_prescription)
+
+    session.commit()
+
+    statement = select(Prescription)
+    results = session.exec(statement)
+    db_prescription = results.first()
+    assert fake_prescription == db_prescription

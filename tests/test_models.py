@@ -48,7 +48,9 @@ def test_insert_event_data() -> None:
 
 @pytest.mark.order(6)
 def test_insert_prescription_data() -> None:
-    fake_prescription = Prescription(id=uuid4(), prescribe=True, last_updated=datetime.now())
+    fake_prescription = Prescription(
+        user_id=uuid4(), site_name=Partner.afro_la, prescribe=True, last_updated=datetime.now()
+    )
 
     session = Session(engine)
     session.add(fake_prescription)

@@ -57,6 +57,7 @@ class Event(SQLModel, table=True):
 
 class Prescription(SQLModel, table=True):
     id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True, nullable=False)
+    site_name: str = Field(primary_key=True)
     prescribe: bool
     last_updated: datetime
     # TODO will add this once we have models to work with!

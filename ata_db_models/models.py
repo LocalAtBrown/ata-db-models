@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, Union
-from uuid import UUID, uuid4
+from uuid import UUID
 
 from pydantic import HttpUrl
 from sqlmodel import JSON, Column, Field, SQLModel, String
@@ -56,7 +56,7 @@ class Event(SQLModel, table=True):
 
 
 class Prescription(SQLModel, table=True):
-    id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True, nullable=False)
+    user_id: UUID = Field(primary_key=True)
     site_name: str = Field(primary_key=True)
     prescribe: bool
     last_updated: datetime

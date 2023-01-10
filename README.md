@@ -39,7 +39,12 @@ No `PORT` is passed because the default port is 5432, the standard for Postgres.
 So you made some changes to what tables there are, what columns there are, indices, etc. and you'd like to
 update the databases. This is what alembic is for!
 
- TODO ALEMBIC INSTRUCTIONS
+To generate a new revision after you've updated the models:
+
+1. Run this from the root of the project: `DB_CONNECTION_STRING='postgresql://user:password@host:port/db_name' alembic revision --autogenerate -m "message"`
+2. Check the `/alembic/versions/` directory for the new revision and verify that it does what you want it to
+3. Run this from the root of the project: `DB_CONNECTION_STRING='postgresql://user:password@host:port/db_name' alembic upgrade head`
+
 
 ## Development
 

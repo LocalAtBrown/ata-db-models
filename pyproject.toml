@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ata-db-models"
-version = "0.0.12"
+version = "0.0.13"
 description = "Database models and migrations for Automating the Ask."
 authors = ["Raaid Arshad <raaid@protonmail.com>"]
 repository = "https://github.com/LocalAtBrown/ata-models"
@@ -8,7 +8,6 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.10"
-alembic = "1.8.1"
 boto3 = "1.26.13"
 boto3-stubs = {version = "1.26.13", extras = ["ssm"]}
 psycopg2 = "2.9.5"
@@ -16,6 +15,7 @@ sqlmodel = "0.0.8"
 
 
 [tool.poetry.dev-dependencies]
+alembic = "1.8.1"
 mypy = "^0.961"
 pre-commit = "^2.19.0"
 pytest = "^7.1.2"

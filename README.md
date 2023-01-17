@@ -30,7 +30,11 @@ If the target cluster has IP restrictions, make sure your IP address is a valid 
 
 An example run with fake credentials (from the root dir of this project with the virtual env
 activated):
-`HOST=fakehost USER=fakeuser PASSWORD=fakepw DB_NAME=postgres python src/init_db.py`
+`HOST=fakehost USER=fakeuser PASSWORD=fakepw DB_NAME=postgres python ata_db_models/db_init_stages/_0_init_db.py`
+
+This should run the most up-to-date SQLModel definitions of the tables, which means you are
+safe to then run any additional changes in role, access, and policy changes. So you can
+run the rest of the steps in `db_init_stages`, one after the other in ascending numerical order.
 
 No `PORT` is passed because the default port is 5432, the standard for Postgres.
 

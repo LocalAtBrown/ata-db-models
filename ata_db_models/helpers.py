@@ -9,8 +9,10 @@ from typing import Optional
 
 import boto3
 from mypy_boto3_ssm import SSMClient
-from sqlalchemy.future.engine import Connection
+from sqlalchemy.future.engine import Connection, create_engine
 from sqlmodel import text
+
+from ata_db_models.models import SQLModel
 
 
 class Privilege(str, Enum):
@@ -172,3 +174,43 @@ def get_ssm_client() -> Optional[SSMClient]:
         return boto3.client("ssm")
     else:
         return None
+
+
+def pre_table_initialization(
+    stage: Stage, components: list[Component], partner_names: list[Partner], create_dbs: bool = True
+) -> None:
+    engine = create_engine(get_conn_string())
+
+    with engine.connect() as conn:
+        if create_dbs:
+            create_database(conn, db_name=stage)
+        for component in components:
+            role = f"{stage}_{component.name}"
+            create_role(conn, role=role)
+            usernames = [f"{stage}_{component.name}_{partner_name}" for partner_name in partner_names]
+            create_users(conn, stage=stage, component=component, partner_names=partner_names)
+            assign_role(conn, role=role, usernames=usernames)
+        conn.commit()
+
+
+def initialize_tables(stage: Stage) -> None:
+    engine = create_engine(get_conn_string(db_name=stage))
+    SQLModel.metadata.create_all(engine)
+
+
+def post_table_initialization(stage: Stage, components: list[Component]) -> None:
+    engine = create_engine(get_conn_string(db_name=stage))
+
+    with engine.connect() as conn:
+        for component in components:
+            for grant in component.grants:
+                for table in grant.tables:
+                    grant_privileges(
+                        conn, user_or_role=f"{stage}_{component.name}", table=table, privileges=grant.privileges
+                    )
+            for policy in component.policies:
+                enable_row_level_security(
+                    conn, table=policy.table, target_column=policy.user_column, role=f"{stage}_{component.name}"
+                )
+
+        conn.commit()

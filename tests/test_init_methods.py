@@ -1,6 +1,11 @@
 import pytest
 from sqlalchemy import create_engine, text
 
+from ata_db_models.db_init_stages._0_init_db import (
+    initialize_tables,
+    post_table_initialization,
+    pre_table_initialization,
+)
 from ata_db_models.helpers import (
     Component,
     Grant,
@@ -9,11 +14,6 @@ from ata_db_models.helpers import (
     RowLevelSecurityPolicy,
     Stage,
     get_conn_string,
-)
-from ata_db_models.init_db import (
-    initialize_tables,
-    post_table_initialization,
-    pre_table_initialization,
 )
 from ata_db_models.models import SQLModel
 

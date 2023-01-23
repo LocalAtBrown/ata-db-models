@@ -102,9 +102,12 @@ def generate_password() -> str:
     return password
 
 
-def create_user(conn: Connection, username: str) -> str:
+def create_user(conn: Connection, username: str, bypassrls: bool = False) -> str:
     pw = generate_password()
-    statement = text(f"CREATE USER {username} WITH PASSWORD :password")
+    rls_flag = ""
+    if bypassrls:
+        rls_flag = " BYPASSRLS"
+    statement = text(f"CREATE USER {username} WITH PASSWORD :password{rls_flag}")
     conn.execute(statement, {"password": pw})
     return pw
 

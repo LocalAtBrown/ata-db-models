@@ -1,6 +1,5 @@
 from datetime import datetime
 from enum import Enum
-from pathlib import Path
 from typing import Optional, Union
 from uuid import UUID
 
@@ -41,7 +40,7 @@ class Event(SQLModel, table=True):
     # User ID set by Snowplow using 3rd party cookie
     network_userid: UUID
     # [STR, CATEGORICAL if needed] Path to page, e.g., /event-directory/ in https://dallasfreepress.com/event-directory/
-    page_urlpath: Path
+    page_urlpath: str
     # URL of the referrer
     page_referrer: HttpUrl = Field(sa_column=Column(String))
     # Maximum page y-offset seen in the last ping period. Depends on event_name == "page_ping"

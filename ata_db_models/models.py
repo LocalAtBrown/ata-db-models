@@ -1,9 +1,19 @@
 from datetime import datetime
+from enum import Enum
 from typing import Optional, Union
 from uuid import UUID
 
 from pydantic import HttpUrl
 from sqlmodel import JSON, Column, Field, SQLModel, String
+
+
+class RefrMedium(str, Enum):
+    email = "email"
+    internal = "internal"
+    paid = "paid"
+    search = "search"
+    social = "social"
+    unknown = "unknown"
 
 
 class Event(SQLModel, table=True):
@@ -38,8 +48,7 @@ class Event(SQLModel, table=True):
     pp_yoffset_max: Optional[float] = None
     # Type of referer. Can be "social", "search", "internal", "unknown", "email"
     # (read: https://docs.snowplow.io/docs/enriching-your-data/available-enrichments/referrer-parser-enrichment/)
-    # TODO consider making this an enum
-    refr_medium: Optional[str] = None
+    refr_medium: Optional[RefrMedium] = None
     # Name of referer if recognised, e.g., "Google" or "Bing"
     refr_source: Optional[str] = None
     # Data/attributes of HTML input and its form in JSON format. Only present if event_name == "change_form"

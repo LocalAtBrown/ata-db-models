@@ -53,6 +53,10 @@ class Event(SQLModel, table=True):
     unstruct_event_com_snowplowanalytics_snowplow_submit_form_1: Optional[Union[list, dict]] = Field(sa_column=Column(JSON))  # type: ignore
     # Raw useragent
     useragent: str
+    br_viewheight: Optional[float]
+    br_viewwidth: Optional[float]
+    refr_urlhost: Optional[str]
+    refr_urlpath: Optional[str]
 
 
 class Prescription(SQLModel, table=True):

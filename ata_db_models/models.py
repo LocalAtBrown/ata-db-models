@@ -37,8 +37,6 @@ class Event(SQLModel, table=True):
     # Name of event. Can be "page_view", "page_ping", "focus_form", "change_form", "submit_form"
     # TODO make enum
     event_name: str
-    # User ID set by Snowplow using 3rd party cookie
-    network_userid: UUID
     # [STR, CATEGORICAL if needed] Path to page, e.g., /event-directory/ in https://dallasfreepress.com/event-directory/
     page_urlpath: str
     # URL of the referrer
@@ -50,17 +48,15 @@ class Event(SQLModel, table=True):
     refr_medium: Optional[RefrMedium] = None
     # Name of referer if recognised, e.g., "Google" or "Bing"
     refr_source: Optional[str] = None
-    # Data/attributes of HTML input and its form in JSON format. Only present if event_name == "change_form"
-    # (read: https://github.com/snowplow/iglu-central/blob/master/schemas/com.snowplowanalytics.snowplow/change_form/jsonschema/1-0-0)
-    unstruct_event_com_snowplowanalytics_snowplow_change_form_1: Optional[Union[list, dict]] = Field(sa_column=Column(JSON))  # type: ignore
-    # Data/attributes of HTML input and its form in JSON format. Only present if event_name == "focus_form"
-    # (read: https://github.com/snowplow/iglu-central/blob/master/schemas/com.snowplowanalytics.snowplow/focus_form/jsonschema/1-0-0)
-    unstruct_event_com_snowplowanalytics_snowplow_focus_form_1: Optional[Union[list, dict]] = Field(sa_column=Column(JSON))  # type: ignore
     # Data/attributes of HTML form and all its inputs in JSON format. Only present if event_name == "submit_form"
     # (read: https://github.com/snowplow/iglu-central/blob/master/schemas/com.snowplowanalytics.snowplow/submit_form/jsonschema/1-0-0)
     unstruct_event_com_snowplowanalytics_snowplow_submit_form_1: Optional[Union[list, dict]] = Field(sa_column=Column(JSON))  # type: ignore
     # Raw useragent
     useragent: str
+    br_viewheight: Optional[float]
+    br_viewwidth: Optional[float]
+    refr_urlhost: Optional[str]
+    refr_urlpath: Optional[str]
 
 
 class Prescription(SQLModel, table=True):

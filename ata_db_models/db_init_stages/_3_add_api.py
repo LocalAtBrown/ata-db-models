@@ -1,33 +1,51 @@
+import json
+import os
+
+from sqlalchemy.future.engine import create_engine
+
 from ata_db_models.helpers import (
     Component,
+    DatabaseConnectionCredentials,
     Grant,
-    Partner,
     Privilege,
-    RowLevelSecurityPolicy,
     Stage,
-    post_table_initialization,
-    pre_table_initialization,
+    create_user,
+    get_conn_string,
+    get_ssm_client,
+    grant_privileges,
 )
-
-
-def add_api(stage: Stage, components: list[Component], partner_names: list[Partner]) -> None:
-    pre_table_initialization(stage=stage, components=components, partner_names=partner_names, create_dbs=False)
-    # SQLAlchemy is idempotent so running this wouldn't break anything, but we don't need to run it
-    # initialize_tables(stage=stage)
-    post_table_initialization(stage=stage, components=components)
-
 
 if __name__ == "__main__":
     stages = [Stage.dev, Stage.prod]
-    api = Component(
-        name="api",
-        grants=[Grant(privileges=[Privilege.SELECT], tables=["prescription"])],
-        policies=[
-            RowLevelSecurityPolicy(table="prescription", user_column="site_name"),
-        ],
-    )
-    components = [api]
-    partner_names = [Partner.afro_la, Partner.dallas_free_press, Partner.open_vallejo, Partner.the_19th]
+    reader = Component(name="api", grants=[Grant(privileges=[Privilege.SELECT], tables=["prescription"])], policies=[])
 
     for stage in stages:
-        add_api(stage=stage, components=components, partner_names=partner_names)
+        engine = create_engine(get_conn_string())
+        ssm_client = get_ssm_client()
+        username = f"{stage}_{reader.name}"
+        with engine.connect() as conn:
+            pw = create_user(conn, username=username, bypassrls=True)
+            conn.commit()
+
+        stage_engine = create_engine(get_conn_string(db_name=stage))
+        with stage_engine.connect() as conn:
+            for grant in reader.grants:
+                for table in grant.tables:
+                    grant_privileges(conn=conn, user_or_role=username, table=table, privileges=grant.privileges)
+            conn.commit()
+
+        if ssm_client:
+            user_creds = DatabaseConnectionCredentials(
+                HOST=os.getenv("HOST", "localhost"),
+                PORT=int(os.getenv("PORT", "5432")),
+                DB_NAME=stage,
+                USERNAME=username,
+                PASSWORD=pw,
+            )
+            ssm_client.put_parameter(
+                Name=f"/{stage}/ata/reader/api/database-credentials",
+                Description=f"DB credentials for the API, for {stage}.",
+                Value=json.dumps(user_creds.__dict__),
+                Type="String",
+                Overwrite=True,
+            )

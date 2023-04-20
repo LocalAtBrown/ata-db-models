@@ -76,10 +76,10 @@ class Prescription(SQLModel, table=True):
 
 
 def default_group() -> Group:
-    return random.choice([g.value for g in Group])
+    return random.choice([g for g in Group])
 
 
-class Group(SQLModel, table=True):
+class UserGroup(SQLModel, table=True):
     user_id: UUID = Field(primary_key=True)
     site_name: str = Field(primary_key=True)
     group: Group = Field(default_factory=default_group)

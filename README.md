@@ -48,6 +48,7 @@ To generate a new revision after you've updated the models:
 1. Run this from the root of the project: `DB_CONNECTION_STRING='postgresql://user:password@host:port/db_name' alembic revision --autogenerate -m "message"`
 2. Check the `/alembic/versions/` directory for the new revision and verify that it does what you want it to
 3. Run this from the root of the project: `DB_CONNECTION_STRING='postgresql://user:password@host:port/db_name' alembic upgrade head`
+4. Note that you only need to generate the revision file (step 1) _once_ because we want the same content in each environment's database, but you do need to run the `upgrade head` command once _for each_ database (change the DB_NAME to the desired target).
 
 To make new users, grant privileges, etc., follow the patterns used in db_init_stages along with the
 helpers under ata_db_models.

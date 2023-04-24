@@ -83,3 +83,4 @@ class UserGroup(SQLModel, table=True):
     user_id: UUID = Field(primary_key=True)
     site_name: str = Field(primary_key=True)
     group: Group = Field(default_factory=default_group)
+    last_updated: datetime = Field(default_factory=datetime.utcnow)

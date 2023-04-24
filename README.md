@@ -49,6 +49,18 @@ To generate a new revision after you've updated the models:
 2. Check the `/alembic/versions/` directory for the new revision and verify that it does what you want it to
 3. Run this from the root of the project: `DB_CONNECTION_STRING='postgresql://user:password@host:port/db_name' alembic upgrade head`
 
+To make new users, grant privileges, etc., follow the patterns used in db_init_stages along with the
+helpers under ata_db_models.
+
+1. Create a new file under db_init_stages that does what you want and is prefixed with `_X_`, where `X` is the next number (it has no function, it's just nice to keep track of the step order).
+2. Run the file. You can run it like so: `HOST=fakehost USER=fakeuser PASSWORD=fakepw DB_NAME=postgres python ata_db_models/db_init_stages/_X_fake_file.py`
+3. I'd recommend that you then connect to the cluster and verify your changes took place.
+
+Note that you must provide valid host, user, password, and database name environment variables for it to work. The `PORT`
+env var has a default value of 5432, so it is omitted here. The only other env var you might need
+(if you are creating new roles/users that have credentials) is the `ENABLE_SSM` env var. By default
+it is `FALSE` but if you set it to `TRUE` then it will make sure to upload any new credentials to the
+SSM parameter store.
 
 ## Development
 

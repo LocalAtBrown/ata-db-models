@@ -76,7 +76,7 @@ class Prescription(SQLModel, table=True):
 
 
 def default_group() -> Group:
-    return random.choice([*Group])
+    return random.choice([g for g in Group])
 
 
 class UserGroup(SQLModel, table=True):

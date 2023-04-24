@@ -26,6 +26,10 @@ class Group(str, Enum):
 class Event(SQLModel, table=True):
     # TODO make enum
     site_name: str = Field(primary_key=True)
+    # Browser viewport height
+    br_viewheight: Optional[float]
+    # Browser viewport width
+    br_viewwidth: Optional[float]
     # Timestamp making allowance for inaccurate device clock
     derived_tstamp: datetime
     # The page's height in pixels
@@ -55,15 +59,15 @@ class Event(SQLModel, table=True):
     refr_medium: Optional[RefrMedium] = None
     # Name of referer if recognised, e.g., "Google" or "Bing"
     refr_source: Optional[str] = None
+    # URL host of referrer
+    refr_urlhost: Optional[str]
+    # URL path of referrer
+    refr_urlpath: Optional[str]
     # Data/attributes of HTML form and all its inputs in JSON format. Only present if event_name == "submit_form"
     # (read: https://github.com/snowplow/iglu-central/blob/master/schemas/com.snowplowanalytics.snowplow/submit_form/jsonschema/1-0-0)
     unstruct_event_com_snowplowanalytics_snowplow_submit_form_1: Optional[Union[list, dict]] = Field(sa_column=Column(JSON))  # type: ignore
     # Raw useragent
     useragent: str
-    br_viewheight: Optional[float]
-    br_viewwidth: Optional[float]
-    refr_urlhost: Optional[str]
-    refr_urlpath: Optional[str]
 
 
 class Prescription(SQLModel, table=True):

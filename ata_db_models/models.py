@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 from enum import Enum
 from typing import Optional, Union
@@ -14,6 +15,12 @@ class RefrMedium(str, Enum):
     search = "search"
     social = "social"
     unknown = "unknown"
+
+
+class Group(str, Enum):
+    A = "A"
+    B = "B"
+    C = "C"
 
 
 class Event(SQLModel, table=True):
@@ -66,3 +73,14 @@ class Prescription(SQLModel, table=True):
     last_updated: datetime
     # TODO will add this once we have models to work with!
     # model_id: UUID = Field(foreign_key="model.id")
+
+
+def default_group() -> Group:
+    return random.choice([g for g in Group])
+
+
+class UserGroup(SQLModel, table=True):
+    user_id: UUID = Field(primary_key=True)
+    site_name: str = Field(primary_key=True)
+    group: Group = Field(default_factory=default_group)
+    last_updated: datetime = Field(default_factory=datetime.utcnow)

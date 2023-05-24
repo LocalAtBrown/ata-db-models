@@ -17,6 +17,6 @@ jobs:
     - name: Set up Poetry
       uses: abatilo/actions-poetry@v2.0.0
       with:
-        poetry-version: 1.1.13
+        poetry-version: 1.4.0
     - name: Publish package
       run: poetry publish --build -u __token__ -p ${{ secrets.PYPI_TOKEN }}

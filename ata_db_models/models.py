@@ -1,4 +1,3 @@
-import random
 from datetime import datetime
 from enum import Enum
 from typing import Optional, Union
@@ -79,12 +78,8 @@ class Prescription(SQLModel, table=True):
     # model_id: UUID = Field(foreign_key="model.id")
 
 
-def default_group() -> Group:
-    return random.choice([g for g in Group])
-
-
 class UserGroup(SQLModel, table=True):
     user_id: UUID = Field(primary_key=True)
     site_name: str = Field(primary_key=True)
-    group: Group = Field(default_factory=default_group)
+    group: Group
     last_updated: datetime = Field(default_factory=datetime.utcnow)

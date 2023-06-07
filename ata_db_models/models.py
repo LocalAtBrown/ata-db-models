@@ -75,18 +75,22 @@ class Event(SQLModel, table=True):
     event_name: str
 
     # URL of the page
+    # TODO: Backfill this field for events before June 7, 2023
     page_url: HttpUrl = Field(sa_column=Column(String))
 
     # Fragment of page URL, e.g., #section1 in https://dallasfreepress.com/event-directory/#section1
+    # TODO: Backfill this field for events before June 1, 2023
     page_urlfragment: Optional[str]
 
     # Host of page, e.g., dallasfreepress.com in https://dallasfreepress.com/event-directory/
+    # TODO: Backfill this field for events before June 7, 2023
     page_urlhost: str
 
     # Path to page, e.g., /event-directory/ in https://dallasfreepress.com/event-directory/
     page_urlpath: str
 
     # Querystring of page, e.g., ?utm_source=google&utm_medium=cpc&utm_campaign=brand
+    # TODO: Backfill this field for events before June 1, 2023
     page_urlquery: Optional[str]
 
     # URL of the referrer
@@ -106,12 +110,14 @@ class Event(SQLModel, table=True):
     refr_urlhost: Optional[str]
 
     # URL fragment of referrer
+    # TODO: Backfill this field for events before June 1, 2023
     refr_urlfragment: Optional[str]
 
     # URL path of referrer
     refr_urlpath: Optional[str]
 
     # URL querystring of referrer
+    # TODO: Backfill this field for events before June 1, 2023
     refr_urlquery: Optional[str]
 
     # Data/attributes of HTML form and all its inputs in JSON format. Only present if event_name == "submit_form"

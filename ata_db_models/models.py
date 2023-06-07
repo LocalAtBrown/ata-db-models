@@ -7,7 +7,16 @@ from pydantic import HttpUrl
 from sqlmodel import JSON, Column, Field, SQLModel, String
 
 
-class RefrMedium(str, Enum):
+class StrEnum(str, Enum):
+    """
+    StrEnum class. Replace with built-in version after upgrading to Python 3.10.
+    """
+
+    def __str__(self) -> str:
+        return f"{self.value}"
+
+
+class RefrMedium(StrEnum):
     email = "email"
     internal = "internal"
     paid = "paid"
@@ -16,15 +25,22 @@ class RefrMedium(str, Enum):
     unknown = "unknown"
 
 
-class Group(str, Enum):
+class Group(StrEnum):
     A = "A"
     B = "B"
     C = "C"
 
 
+class SiteName(StrEnum):
+    AFRO_LA = "afro-la"
+    DALLAS_FREE_PRESS = "dallas-free-press"
+    OPEN_VALLEJO = "open-vallejo"
+    THE_19TH = "the-19th"
+
+
 class Event(SQLModel, table=True):
-    # TODO make enum
-    site_name: str = Field(primary_key=True)
+    # Site name
+    site_name: SiteName = Field(primary_key=True)
 
     # Browser viewport height
     br_viewheight: Optional[float]
@@ -58,13 +74,23 @@ class Event(SQLModel, table=True):
     # TODO make enum
     event_name: str
 
+    # URL of the page
+    # TODO: Backfill this field for events before June 7, 2023
+    page_url: HttpUrl = Field(sa_column=Column(String))
+
     # Fragment of page URL, e.g., #section1 in https://dallasfreepress.com/event-directory/#section1
+    # TODO: Backfill this field for events before June 1, 2023
     page_urlfragment: Optional[str]
+
+    # Host of page, e.g., dallasfreepress.com in https://dallasfreepress.com/event-directory/
+    # TODO: Backfill this field for events before June 7, 2023, then remove the Optional in the type hint
+    page_urlhost: Optional[str]
 
     # Path to page, e.g., /event-directory/ in https://dallasfreepress.com/event-directory/
     page_urlpath: str
 
     # Querystring of page, e.g., ?utm_source=google&utm_medium=cpc&utm_campaign=brand
+    # TODO: Backfill this field for events before June 1, 2023
     page_urlquery: Optional[str]
 
     # URL of the referrer
@@ -84,12 +110,14 @@ class Event(SQLModel, table=True):
     refr_urlhost: Optional[str]
 
     # URL fragment of referrer
+    # TODO: Backfill this field for events before June 1, 2023
     refr_urlfragment: Optional[str]
 
     # URL path of referrer
     refr_urlpath: Optional[str]
 
     # URL querystring of referrer
+    # TODO: Backfill this field for events before June 1, 2023
     refr_urlquery: Optional[str]
 
     # Data/attributes of HTML form and all its inputs in JSON format. Only present if event_name == "submit_form"

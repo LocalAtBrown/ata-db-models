@@ -83,8 +83,8 @@ class Event(SQLModel, table=True):
     page_urlfragment: Optional[str]
 
     # Host of page, e.g., dallasfreepress.com in https://dallasfreepress.com/event-directory/
-    # TODO: Backfill this field for events before June 7, 2023
-    page_urlhost: str
+    # TODO: Backfill this field for events before June 7, 2023, then remove the Optional in the type hint
+    page_urlhost: Optional[str]
 
     # Path to page, e.g., /event-directory/ in https://dallasfreepress.com/event-directory/
     page_urlpath: str

@@ -28,6 +28,8 @@ def test_insert_event_data() -> None:
         event_id=uuid4(),
         event_name="page_ping",
         network_userid=uuid4(),
+        page_url="https://www.fake.com/path/to/fake/article",
+        page_urlhost="www.fake.com",
         page_urlpath="/path/to/fake/article",
         page_referrer="https://www.fake.com",
         pp_yoffset_max=1,

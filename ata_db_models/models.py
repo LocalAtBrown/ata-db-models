@@ -74,8 +74,14 @@ class Event(SQLModel, table=True):
     # TODO make enum
     event_name: str
 
+    # URL of the page
+    page_url: HttpUrl = Field(sa_column=Column(String))
+
     # Fragment of page URL, e.g., #section1 in https://dallasfreepress.com/event-directory/#section1
     page_urlfragment: Optional[str]
+
+    # Host of page, e.g., dallasfreepress.com in https://dallasfreepress.com/event-directory/
+    page_urlhost: str
 
     # Path to page, e.g., /event-directory/ in https://dallasfreepress.com/event-directory/
     page_urlpath: str

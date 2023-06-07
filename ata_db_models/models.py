@@ -39,7 +39,7 @@ class SiteName(StrEnum):
 
 
 class Event(SQLModel, table=True):
-    # TODO make enum
+    # Site name
     site_name: SiteName = Field(primary_key=True)
 
     # Browser viewport height

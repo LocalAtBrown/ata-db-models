@@ -4,7 +4,6 @@ import random
 import secrets
 import string
 from dataclasses import dataclass
-from enum import Enum
 from typing import Optional
 
 import boto3
@@ -12,10 +11,10 @@ from mypy_boto3_ssm import SSMClient
 from sqlalchemy.future.engine import Connection, create_engine
 from sqlmodel import text
 
-from ata_db_models.models import SQLModel
+from ata_db_models.models import SQLModel, StrEnum
 
 
-class Privilege(str, Enum):
+class Privilege(StrEnum):
     """
     Possible privileges to grant to Postgres users: https://www.postgresql.org/docs/15/ddl-priv.html
     """
@@ -36,12 +35,12 @@ class Privilege(str, Enum):
     ALTER_SYSTEM = "ALTER_SYSTEM"
 
 
-class Stage(str, Enum):
+class Stage(StrEnum):
     dev = "dev"
     prod = "prod"
 
 
-class Partner(str, Enum):
+class Partner(StrEnum):
     afro_la = "afro_la"
     dallas_free_press = "dallas_free_press"
     open_vallejo = "open_vallejo"

@@ -7,7 +7,16 @@ from pydantic import HttpUrl
 from sqlmodel import JSON, Column, Field, SQLModel, String
 
 
-class RefrMedium(str, Enum):
+class StrEnum(str, Enum):
+    """
+    StrEnum class. Replace with built-in version after upgrading to Python 3.10.
+    """
+
+    def __str__(self) -> str:
+        return f"{self.value}"
+
+
+class RefrMedium(StrEnum):
     email = "email"
     internal = "internal"
     paid = "paid"
@@ -16,15 +25,22 @@ class RefrMedium(str, Enum):
     unknown = "unknown"
 
 
-class Group(str, Enum):
+class Group(StrEnum):
     A = "A"
     B = "B"
     C = "C"
 
 
+class SiteName(StrEnum):
+    AFRO_LA = "afro-la"
+    DALLAS_FREE_PRESS = "dallas-free-press"
+    OPEN_VALLEJO = "open-vallejo"
+    THE_19TH = "the-19th"
+
+
 class Event(SQLModel, table=True):
     # TODO make enum
-    site_name: str = Field(primary_key=True)
+    site_name: SiteName = Field(primary_key=True)
 
     # Browser viewport height
     br_viewheight: Optional[float]
